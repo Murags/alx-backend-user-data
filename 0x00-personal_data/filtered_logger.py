@@ -26,7 +26,8 @@ class RedactingFormatter(logging.Formatter):
                             super().format(record), self.SEPARATOR)
 
 
-def filter_datum(fields, redaction, message, separator):
+def filter_datum(fields: list(str), redaction: str, message: str,
+                 separator: str) -> str:
     """_summary_
 
     Args:
