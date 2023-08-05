@@ -20,7 +20,7 @@ def hash_password(password: str) -> bytes:
     return hashed_pwd
 
 
-def is_valid(hashed_pwd: bytes, password: str) -> bool:
+def is_valid(hashed_password: bytes, password: str) -> bool:
     """_summary_
 
     Args:
@@ -30,6 +30,6 @@ def is_valid(hashed_pwd: bytes, password: str) -> bool:
     Returns:
         bool: _description_
     """
-    if bcrypt.checkpw(password.encode("utf-8"), hashed_pwd):
+    if bcrypt.checkpw(password.encode("utf-8"), hashed_password):
         return True
     return False
