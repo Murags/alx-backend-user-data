@@ -19,10 +19,23 @@ class RedactingFormatter(logging.Formatter):
     __fields = ""
 
     def __init__(self, fields):
+        """_summary_
+
+        Args:
+            fields (_type_): _description_
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.__fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
+        """_summary_
+
+        Args:
+            record (logging.LogRecord): _description_
+
+        Returns:
+            str: _description_
+        """
         return filter_datum(self.__fields, self.REDACTION,
                             super().format(record), self.SEPARATOR)
 
@@ -97,4 +110,5 @@ def main():
 
 
 if __name__ == "__main__":
+
     main()
