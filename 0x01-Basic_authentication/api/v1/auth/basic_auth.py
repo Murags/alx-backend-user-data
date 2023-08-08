@@ -93,12 +93,25 @@ class BasicAuth(Auth):
         if not user_pwd or not isinstance(user_pwd, str):
             return None
 
-        user = User.search(attributes={"email": user_email})
+        users = User.search(attributes={"email": user_email})
 
-        if not user:
+        if not users:
             return None
 
-        if not user.is_valid_password(user_pwd):
-            return None
+        for user in users:
+            if user.is_valid_password(user_pwd):
+                return user
 
-        return user
+        return None
+
+    def current_user(self, request=None) -> TypeVar('User'):
+        """_summary_
+
+        Returns:
+            _type_: _description_
+        """
+        auth_str = self.authorization_header(request)
+        auth_base64 = self.extract_base64_authorization_header(auth_str)
+        decoded_auth = self.decode_base64_authorization_header(auth_base64)
+        user_email, user_pwd = self.extract_user_credentials(decoded_auth)
+        return self.user_object_from_credentials(user_email, user_pwd)
