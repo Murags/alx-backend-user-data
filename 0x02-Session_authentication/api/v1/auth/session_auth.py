@@ -23,7 +23,7 @@ class SessionAuth(Auth):
         Returns:
             str: _description_
         """
-        if user_id is None or isinstance(user_id, str):
+        if user_id is None or not isinstance(user_id, str):
             return None
 
         sesh_id = str(uuid4())
@@ -40,6 +40,6 @@ class SessionAuth(Auth):
         Returns:
             str: _description_
         """
-        if session_id is None or isinstance(session_id, str):
+        if session_id is None or not isinstance(session_id, str):
             return None
         return SessionAuth.user_id_by_session_id.get(session_id)
