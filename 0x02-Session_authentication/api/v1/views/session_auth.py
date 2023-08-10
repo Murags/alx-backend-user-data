@@ -2,7 +2,7 @@
 """_summary_"""
 
 from api.v1.views import app_views
-from flask import abort, request, jsonify
+from flask import abort, request, jsonify, make_response
 from models.user import User
 from os import getenv
 
@@ -23,7 +23,7 @@ def login():
         return jsonify({"error": "password missing"}), 400
 
     user_inst = User.search({"email": email})
-    if user_inst is None:
+    if user_inst is None or len(user_inst) == 0:
         return jsonify({"error": "no user found for this email"}), 404
     curr_user = None
     for user in user_inst:
@@ -32,14 +32,17 @@ def login():
             break
     if curr_user is None:
         return jsonify({"error": "wrong password"}), 401
+
     from api.v1.app import auth
-    sesh_id = auth.create_session(curr_user.get("id"))
-    response = jsonify(curr_user.to_json())
+    sesh_id = auth.create_session(curr_user.id)
+    response = make_response(jsonify(curr_user.to_json()), 200)
     response.set_cookie(getenv('SESSION_NAME'), sesh_id)
 
     return response
 
-@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+
+@app_views.route('/auth_session/logout', methods=['DELETE'],
+                 strict_slashes=False)
 def logout():
     """_summary_
 
