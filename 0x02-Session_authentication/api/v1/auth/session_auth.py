@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """_summary_"""
 
+from os import getenv
 from api.v1.auth.auth import Auth
 from uuid import uuid4
 from typing import Dict
@@ -54,3 +55,23 @@ class SessionAuth(Auth):
         cookie = self.session_cookie(request)
         user_id = self.user_id_for_session_id(cookie)
         return User.get(user_id)
+
+    def destroy_session(self, request=None) -> bool:
+        """_summary_
+
+        Args:
+            request (_type_, optional): _description_. Defaults to None.
+
+        Returns:
+            bool: _description_
+        """
+        if not request:
+            return False
+        session_id = request.cookies.get(getenv('SESSION_NAME'))
+        if not session_id:
+            return False
+        user_id = self.user_id_for_session_id(session_id)
+        if not user_id:
+            return False
+        SessionAuth.user_id_by_session_id.pop(session_id)
+        return True

@@ -2,7 +2,7 @@
 """_summary_"""
 
 from api.v1.views import app_views
-from flask import request, jsonify
+from flask import abort, request, jsonify
 from models.user import User
 from os import getenv
 
@@ -38,3 +38,16 @@ def login():
     response.set_cookie(getenv('SESSION_NAME'), sesh_id)
 
     return response
+
+@app_views.route('/auth_session/logout', methods=['DELETE'], strict_slashes=False)
+def logout():
+    """_summary_
+
+    Returns:
+        _type_: _description_
+    """
+    from api.v1.app import auth
+    status = auth.destroy_session(request)
+    if not status:
+        abort(404)
+    return jsonify({}), 200
