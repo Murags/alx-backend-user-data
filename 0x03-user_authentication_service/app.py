@@ -48,12 +48,11 @@ def login() -> str:
 def logout():
     """destroys a cookie session"""
     sesh_id = request.cookies.get("session_id")
-    if sesh_id:
-        user = AUTH.get_user_from_session_id(sesh_id)
-        if user:
-            AUTH.destroy_session(user.id)
-            return redirect("/")
-        abort(403)
+    user = AUTH.get_user_from_session_id(sesh_id)
+    if user:
+        AUTH.destroy_session(user.id)
+        return redirect("/")
+    abort(403)
 
 
 if __name__ == "__main__":
