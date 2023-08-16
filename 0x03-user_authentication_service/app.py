@@ -57,7 +57,7 @@ def logout():
 
 
 @app.route("/profile", strict_slashes=False)
-def profile():
+def profile() -> str:
     """Gets the user email based on session"""
 
     sesh_id = request.cookies.get("session_id")
