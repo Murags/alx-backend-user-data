@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """Auth module"""
+from typing import Optional
 import bcrypt
 from db import DB
 from user import User
@@ -15,6 +16,7 @@ class Auth:
         self._db = DB()
 
     def register_user(self, email: str, password: str) -> User:
+        """Registers a user"""
         hash_pwd = _hash_password(password)
 
         try:
@@ -41,6 +43,23 @@ class Auth:
             sesh_id = _generate_uuid()
             user.session_id = sesh_id
             return sesh_id
+        except Exception:
+            return None
+
+    def get_user_from_session_id(self, session_id: str) -> Optional[User]:
+        """Gets user from database using the session id"""
+        try:
+            user = self._db.find_user_by(session_id=session_id)
+            return user
+        except Exception:
+            return None
+
+    def destroy_session(self, user_id: str):
+        """Destroys a session of a User"""
+        try:
+            user = self._db.find_user_by(id=user_id)
+            user.session_id = None
+            return None
         except Exception:
             return None
 
