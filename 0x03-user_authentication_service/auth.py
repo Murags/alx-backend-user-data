@@ -34,6 +34,16 @@ class Auth:
         except Exception:
             return False
 
+    def create_session(self, email: str) -> str:
+        """Creates a user a session and return the session id"""
+        try:
+            user = self._db.find_user_by(email=email)
+            sesh_id = _generate_uuid()
+            user.session_id = sesh_id
+            return sesh_id
+        except Exception:
+            return None
+
 
 def _hash_password(password):
     """_summary_
