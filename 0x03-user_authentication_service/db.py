@@ -41,9 +41,12 @@ class DB:
         return new_user
 
     def find_user_by(self, **kwargs):
+        """_summary_
 
+        Raises:
+            InvalidRequestError: _description_
+        """
         col_names = [column.name for column in User.__table__.column]
         for key in kwargs.keys():
             if key not in col_names:
                 raise InvalidRequestError
-
