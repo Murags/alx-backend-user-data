@@ -85,7 +85,7 @@ class Auth:
             raise ValueError
 
 
-def _hash_password(password):
+def _hash_password(password: str) -> bytes:
     """_summary_
 
     Args:
