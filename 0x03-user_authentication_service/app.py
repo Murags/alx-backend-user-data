@@ -56,5 +56,29 @@ def logout():
     abort(403)
 
 
+@app.route("/profile", strict_slashes=False)
+def profile():
+    """Gets the user email based on session"""
+
+    sesh_id = request.cookies.get("session_id")
+    user = AUTH.get_user_from_session_id(sesh_id)
+
+    if not user:
+        abort(403)
+
+    return jsonify({"email": user.email}), 200
+
+
+@app.route("/reset_password", methods=["POST"], strict_slashes=False)
+def get_reset_password_token():
+    """gets the reset password token"""
+    email = request.form.get("email")
+    try:
+        token = AUTH.get_reset_password_token(email)
+        return jsonify({"email": email, "reset_token": token}), 200
+    except ValueError:
+        abort(403)
+
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port="5000")
