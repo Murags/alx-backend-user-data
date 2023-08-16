@@ -6,6 +6,7 @@ from user import User
 from sqlalchemy.orm.exc import NoResultFound
 from uuid import uuid4
 
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -32,8 +33,6 @@ class Auth:
             return False
         except Exception:
             return False
-
-
 
 
 def _hash_password(password):
