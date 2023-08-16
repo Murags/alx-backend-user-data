@@ -82,7 +82,7 @@ def reset_password_token(email: str) -> str:
     response = request.json()
     reset_token = response.get("reset_token")
     assert request.status_code == 200
-    assert isinstance(reset_token, str) == True
+    assert isinstance(reset_token, str) is True
     return reset_token
 
 
