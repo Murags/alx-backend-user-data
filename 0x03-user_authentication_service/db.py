@@ -41,13 +41,30 @@ class DB:
         self._session.commit()
         return user
 
-    # def find_user_by(self, **kwargs):
-    #     """_summary_
+    def find_user_by(self, **kwargs) -> User:
+        """searches for user using the key words given
+        """
+        query = self._session.query(User)
+        try:
+            user = query.filter_by(**kwargs).first()
+            if not user:
+                raise NoResultFound
+        except TypeError:
+            raise InvalidRequestError
 
-    #     Raises:
-    #         InvalidRequestError: _description_
-    #     """
-    #     col_names = [column.name for column in User.__table__.column]
-    #     for key in kwargs.keys():
-    #         if key not in col_names:
-    #             raise InvalidRequestError
+        return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """
+        Updates the user table
+        """
+        user = self.find_user_by(id=user_id)
+        for key, value in kwargs.items():
+            if hasattr(User, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError
+
+        self.__session.commit()
+        return None
+
