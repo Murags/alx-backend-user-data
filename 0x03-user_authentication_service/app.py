@@ -2,6 +2,7 @@
 """sample Flask application"""
 
 from flask import Flask, jsonify, request, make_response, abort, redirect
+from flask import url_for
 from auth import Auth
 
 
@@ -51,7 +52,7 @@ def logout():
     user = AUTH.get_user_from_session_id(sesh_id)
     if user:
         AUTH.destroy_session(user.id)
-        return redirect("/")
+        return redirect(url_for("home"))
     abort(403)
 
 
