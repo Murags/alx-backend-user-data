@@ -67,4 +67,3 @@ class DB:
 
         self.__session.commit()
         return None
-
